@@ -1,3 +1,12 @@
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
 
 window.onchoosefn = function(event) {
     var NUM_COLUMNS = 5;
@@ -58,16 +67,6 @@ window.onchoosefn = function(event) {
     window.maxResultSize = maxResultSize;
     
     window.generateMathQuestions(operation, maxResultSize);
-
-    function getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }
     
     function getRandomIntInclusive(min, max) {
         min = Math.ceil(min);
@@ -244,3 +243,18 @@ window.onchoosefn = function(event) {
             updateColumnsPosition(true);
     }, 20);
 }
+
+window.addEventListener("load", function() {
+    var operation = getParameterByName("operation");
+    var factscategory = getParameterByName("factscategory");
+    if(factscategory != null) {
+        document.querySelector('label[for="facts-to-' + factscategory + '"]').parentNode.querySelector("input").checked = true;
+        if(operation != null) {
+            window.onchoosefn({
+                currentTarget: {
+                    textContent: operation
+                }
+            });
+        }
+    }
+});
