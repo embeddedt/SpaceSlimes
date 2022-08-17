@@ -269,3 +269,7 @@ h2 {
 #option-screen span {
     max-width: 40rem;
 }
+
+.padded-radio-label {
+    padding: 8px 0;
+}
